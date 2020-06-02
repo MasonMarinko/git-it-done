@@ -42,7 +42,6 @@ var formSubmitHandler = function(event) {
 
 //========using this to properly show the information we actually want=====//
 var displayRepos = function(repos, searchTerm) {
-    debugger
     //=============== check if api (search) returned any repos or user has none====//
     if (repos.length === 0) {
         repoContainerEl.textContent = "No repositories found.";
