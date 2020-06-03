@@ -6,36 +6,36 @@ var repoNameEl = document.querySelector("#repo-name");
 //====function getting api and checking on things like if there is more than 30 repos======//
 var getRepoIssues = function (repo) {
     var apiUrl = "https://api.github.com/repos/" + repo + "/issues?directions=asc";
-    fetch(apiUrl).then(function(response){
-    //======== If request successful ============//
-    if (response.ok) {
-        response.json().then(function(data) {
-            //======== pass response data to dom function======//
-            displayIssues(data);
+    fetch(apiUrl).then(function (response) {
+        //======== If request successful ============//
+        if (response.ok) {
+            response.json().then(function (data) {
+                //======== pass response data to dom function======//
+                displayIssues(data);
 
-            //=========== check if api has paginated issues=========//
-            if (response.headers.get("Link")) {
-                displayWarning(repo)
-            }
-        });
-    } else {
-        //====== if not successful, redirect to homepage======//
-        document.location.replace("./index.html")
-    }
+                //=========== check if api has paginated issues=========//
+                if (response.headers.get("Link")) {
+                    displayWarning(repo)
+                }
+            });
+        } else {
+            //====== if not successful, redirect to homepage======//
+            document.location.replace("./index.html")
+        }
     });
 };
 
-var getRepoName = function() {
+var getRepoName = function () {
     //======== grab repo name from url query string =======//
     var queryString = document.location.search;
     var repoName = queryString.split("=")[1];
 
 
-    if(repoName) {
+    if (repoName) {
         //========= display repo name on the page ======//
         repoNameEl.textContent = repoName;
-    
-    
+
+
         getRepoIssues(repoName);
     } else {
         //======== if no repo was given, redirect to the homepage ======//
@@ -44,7 +44,7 @@ var getRepoName = function() {
 };
 
 //=====function that appends and creates results, checks if there is no results as well=====//
-var displayIssues = function(issues) {
+var displayIssues = function (issues) {
     if (issues.length === 0) {
         issueContainerEl.textContent = "This repo has no open issues!";
         return;
@@ -52,7 +52,7 @@ var displayIssues = function(issues) {
     for (var i = 0; i < issues.length; i++) {
         //=======create a link element to take users to the issues on github========//
         var issueEl = document.createElement("a");
-        issueEl.classList="list-item flex-row justify-space-between align-center";
+        issueEl.classList = "list-item flex-row justify-space-between align-center";
         issueEl.setAttribute("href", issues[i].html_url);
         issueEl.setAttribute("target", "_blank");
 
@@ -79,7 +79,7 @@ var displayIssues = function(issues) {
     }
 };
 
-var displayWarning = function(repo) {
+var displayWarning = function (repo) {
     //========= add text to warning container======//
     limitWarningEl.textContent = "To see more than 30 issues, visit ";
 
