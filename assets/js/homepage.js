@@ -2,6 +2,7 @@ var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#username");
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
+var languageButtonsEl = document.querySelector("#language-buttons")
 
 //=======Grabbing information from API===========//
 var getUserRepos = function (user) {
@@ -39,6 +40,22 @@ var formSubmitHandler = function(event) {
         alert("Please enter a GitHub username");
     }
 }
+
+//=========== Allows for search with certain perameters======//
+var getFeaturedRepos = function(language) {
+    var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featurted&sort=help-wanted-issues";
+
+    fetch(apiUrl).then(function(response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                displayRepos(data.items, language);
+            })
+        } else {
+            alert("Error: " + response.statusText);
+        }
+    });
+};
+
 
 //========using this to properly show the information we actually want=====//
 var displayRepos = function(repos, searchTerm) {
@@ -88,6 +105,17 @@ var displayRepos = function(repos, searchTerm) {
     }
 };
 
+var buttonClickHandler = function(event) {
+    var language = event.target.getAttribute("data-language")
+    if (language) {
+        getFeaturedRepos(language);
+
+        // clear old content
+        repoContainerEl.textContent = "";
+    }
+}
+
 
 //==========This event calls and starts formSubmitHandler=======//
 userFormEl.addEventListener("submit", formSubmitHandler);
+languageButtonsEl.addEventListener("click", buttonClickHandler);
